@@ -4,15 +4,24 @@ import torch.nn as nn
 from torchvision import transforms
 from torchvision.models import (
     resnet50,
-    shufflenet_v2_x1_0,
-    ResNet50_Weights,
-    ShuffleNet_V2_X1_0_Weights
+    shufflenet_v2_x1_0
 )
 from PIL import Image
 import json
+import os
+import gdown
 
 
-# ---------------- Load class names ----------------
+# ---------------- Model Download ----------------
+MODEL_PATH = "best_plant_disease_model.pth"
+FILE_ID = "1RUurlqVd2nF7FdgjDrfKfv7butpeUaNo"
+
+if not os.path.exists(MODEL_PATH):
+    url = f"https://drive.google.com/uc?id={FILE_ID}"
+    gdown.download(url, MODEL_PATH, quiet=False)
+
+
+# ---------------- Load Class Names ----------------
 with open("class_names.json", "r") as f:
     class_names = json.load(f)
 
@@ -52,13 +61,13 @@ class ShuffleNetResNet50Ensemble(nn.Module):
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-# ---------------- Load trained model ----------------
+# ---------------- Load Model ----------------
 @st.cache_resource
 def load_model():
     model = ShuffleNetResNet50Ensemble(len(class_names))
     model.load_state_dict(
         torch.load(
-            "best_plant_disease_model.pth",
+            MODEL_PATH,
             map_location=device
         )
     )
@@ -70,7 +79,7 @@ def load_model():
 model = load_model()
 
 
-# ---------------- Transform ----------------
+# ---------------- Image Transform ----------------
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -93,7 +102,7 @@ def predict(image):
     return class_names[pred.item()], conf.item()
 
 
-# ---------------- UI ----------------
+# ---------------- Streamlit UI ----------------
 st.title("🌿 Plant Disease Classification")
 st.write("Upload a leaf image to detect plant disease")
 
@@ -102,7 +111,7 @@ uploaded_file = st.file_uploader(
     type=["jpg", "jpeg", "png"]
 )
 
-if uploaded_file:
+if uploaded_file is not None:
     image = Image.open(uploaded_file).convert("RGB")
 
     st.image(
@@ -115,4 +124,4 @@ if uploaded_file:
         label, confidence = predict(image)
 
         st.success(f"Prediction: {label}")
-        st.info(f"Confidence: {confidence*100:.2f}%")
+        st.info(f"Confidence: {confidence * 100:.2f}%")
