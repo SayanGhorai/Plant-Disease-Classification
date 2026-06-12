@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.pyc
+get-pip.py
+sample_images/
+best_plant_disease_model.pth
