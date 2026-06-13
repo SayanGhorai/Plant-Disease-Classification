@@ -140,8 +140,11 @@ This application uses an **Ensemble Deep Learning Model**:
 - ShuffleNetV2
 
 Dataset:
-- 38 Plant Disease Classes
-- Multiple crop species
+- New Plant Diseases Dataset (Kaggle)
+- 14 Unique Plants
+- 38 Disease Classes
+- 70,295 Training Images
+- 17,572 Testing Images
 
 Built with:
 - PyTorch
