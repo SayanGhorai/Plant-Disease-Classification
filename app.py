@@ -151,9 +151,8 @@ Built with:
 # Supported plants
 st.subheader("🌱 Supported Plants")
 st.info("""
-🍎 Apple | 🫐 Blueberry | 🍒 Cherry | 🌽 Corn  
-🍇 Grape | 🍊 Orange | 🍑 Peach | 🌶 Pepper  
-🥔 Potato | 🍓 Strawberry | 🍅 Tomato
+🍎 Apple | 🫐 Blueberry | 🍒 Cherry | 🌽 Corn  🍇 Grape | 
+    🍊 Orange | 🍑 Peach | 🌶 Pepper  🥔 Potato | 🍓 Strawberry | 🍅 Tomato
 """)
 
 # Upload section
