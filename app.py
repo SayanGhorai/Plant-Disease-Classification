@@ -129,7 +129,7 @@ st.markdown("""
 Detect plant diseases instantly using deep learning.
 """)
 
-st.markdown("---")
+st.markdown("<br>", unsafe_allow_html=True)
 
 # Sidebar
 st.sidebar.title("📌 About")
@@ -191,5 +191,9 @@ if uploaded_file is not None:
             st.error("Low confidence prediction. Try a clearer image.")
 
 # Footer
-st.markdown("---")
-st.caption("Built by Sayan Ghorai | Plant Disease Detection using Deep Learning")
+st.markdown(
+    "<p style='text-align:center; margin-top:20px; color:gray;'>"
+    "Built by Sayan Ghorai | Plant Disease Detection using Deep Learning"
+    "</p>",
+    unsafe_allow_html=True
+)
