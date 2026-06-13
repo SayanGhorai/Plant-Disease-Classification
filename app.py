@@ -182,7 +182,7 @@ if uploaded_file is not None:
     st.image(
         image,
         caption="Uploaded Leaf Image",
-        use_container_width=True
+        width=350
     )
 
     if st.button("🔍 Predict Disease"):
