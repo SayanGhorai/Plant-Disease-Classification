@@ -103,11 +103,47 @@ def predict(image):
 
 
 # ---------------- Streamlit UI ----------------
-st.title("🌿 Plant Disease Classification")
-st.write("Upload a leaf image to detect plant disease")
 
+# Page config
+st.set_page_config(
+    page_title="Plant Disease Classification",
+    page_icon="🌿",
+    layout="centered"
+)
+
+# Header
+st.markdown("""
+# 🌿 Plant Disease Classification System
+AI-powered deep learning system for detecting plant diseases from leaf images.
+Upload a leaf image and get instant predictions with confidence score.
+""")
+
+# Sidebar
+st.sidebar.title("📌 About")
+st.sidebar.info("""
+This application uses an **Ensemble Deep Learning Model**:
+
+- ResNet50
+- ShuffleNetV2
+
+Dataset:
+- 38 Plant Disease Classes
+- Multiple crop species
+
+Built with:
+- PyTorch
+- Streamlit
+""")
+
+# Supported plants
+st.subheader("🌱 Supported Plants")
+st.write(
+    "Apple, Blueberry, Cherry, Corn, Grape, Orange, Peach, Pepper, Potato, Strawberry, Tomato"
+)
+
+# File uploader
 uploaded_file = st.file_uploader(
-    "Upload image",
+    "📤 Upload a leaf image",
     type=["jpg", "jpeg", "png"]
 )
 
@@ -116,12 +152,22 @@ if uploaded_file is not None:
 
     st.image(
         image,
-        caption="Uploaded Image",
+        caption="Uploaded Leaf Image",
         use_container_width=True
     )
 
-    if st.button("Predict"):
+    if st.button("🔍 Predict Disease"):
         label, confidence = predict(image)
 
-        st.success(f"Prediction: {label}")
-        st.info(f"Confidence: {confidence * 100:.2f}%")
+        st.subheader("📊 Prediction Result")
+        st.metric("Disease", label)
+        st.metric("Confidence", f"{confidence * 100:.2f}%")
+
+        if confidence < 0.70:
+            st.warning(
+                "Low confidence prediction. Please upload a clearer leaf image."
+            )
+
+# Footer
+st.markdown("---")
+st.caption("Built by Sayan Ghorai | Plant Disease Detection using Deep Learning")
