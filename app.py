@@ -111,12 +111,25 @@ st.set_page_config(
     layout="centered"
 )
 
+# Custom CSS for bigger upload box
+st.markdown("""
+<style>
+[data-testid="stFileUploader"] {
+    border: 2px dashed #4CAF50;
+    border-radius: 15px;
+    padding: 25px;
+    background-color: #1e1e1e;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Header
 st.markdown("""
-# 🌿 Plant Disease Classification System
-AI-powered deep learning system for detecting plant diseases from leaf images.
-Upload a leaf image and get instant predictions with confidence score.
+# 🌿 Plant Disease Classifier
+Detect plant diseases instantly using deep learning.
 """)
+
+st.markdown("---")
 
 # Sidebar
 st.sidebar.title("📌 About")
@@ -137,14 +150,20 @@ Built with:
 
 # Supported plants
 st.subheader("🌱 Supported Plants")
-st.write(
-    "Apple, Blueberry, Cherry, Corn, Grape, Orange, Peach, Pepper, Potato, Strawberry, Tomato"
-)
+st.info("""
+🍎 Apple | 🫐 Blueberry | 🍒 Cherry | 🌽 Corn  
+🍇 Grape | 🍊 Orange | 🍑 Peach | 🌶 Pepper  
+🥔 Potato | 🍓 Strawberry | 🍅 Tomato
+""")
 
-# File uploader
+# Upload section
+st.subheader("📤 Upload Leaf Image")
+st.caption("Drag and drop your leaf image here or browse files.")
+
 uploaded_file = st.file_uploader(
-    "📤 Upload a leaf image",
-    type=["jpg", "jpeg", "png"]
+    "Drop image here",
+    type=["jpg", "jpeg", "png"],
+    label_visibility="collapsed"
 )
 
 if uploaded_file is not None:
@@ -157,16 +176,19 @@ if uploaded_file is not None:
     )
 
     if st.button("🔍 Predict Disease"):
-        label, confidence = predict(image)
+        with st.spinner("Analyzing leaf image..."):
+            label, confidence = predict(image)
 
         st.subheader("📊 Prediction Result")
         st.metric("Disease", label)
         st.metric("Confidence", f"{confidence * 100:.2f}%")
 
-        if confidence < 0.70:
-            st.warning(
-                "Low confidence prediction. Please upload a clearer leaf image."
-            )
+        if confidence >= 0.90:
+            st.success("High confidence prediction")
+        elif confidence >= 0.70:
+            st.warning("Medium confidence prediction")
+        else:
+            st.error("Low confidence prediction. Try a clearer image.")
 
 # Footer
 st.markdown("---")
