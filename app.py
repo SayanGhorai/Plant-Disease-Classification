@@ -151,10 +151,11 @@ Built with:
 # Supported plants
 st.subheader("🌱 Supported Plants")
 st.info("""
-🍎 Apple | 🫐 Blueberry | 🍒 Cherry | 🌽 Corn  🍇 Grape | 
-    🍊 Orange | 🍑 Peach | 🌶 Pepper  🥔 Potato | 🍓 Strawberry | 🍅 Tomato
+🍎 Apple | 🫐 Blueberry | 🍒 Cherry | 🌽 Corn  
+🍇 Grape | 🍊 Orange | 🫘 Soybean | 🎃 Squash  
+🥔 Potato | 🍓 Strawberry | 🍑 Peach | 🌶 Pepper  
+🍅 Tomato | 🍇 Raspberry
 """)
-
 # Upload section
 st.subheader("📤 Upload Leaf Image")
 st.caption("Drag and drop your leaf image here or browse files.")
