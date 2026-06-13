@@ -150,12 +150,20 @@ Built with:
 
 # Supported plants
 st.subheader("🌱 Supported Plants")
-st.info("""
-🍎 Apple | 🫐 Blueberry | 🍒 Cherry | 🌽 Corn  
-🍇 Grape | 🍊 Orange | 🫘 Soybean | 🎃 Squash  
-🥔 Potato | 🍓 Strawberry | 🍑 Peach | 🌶 Pepper  
-🍅 Tomato | 🍇 Raspberry
-""")
+
+plants = [
+    "🍎 Apple", "🫐 Blueberry", "🍒 Cherry", "🌽 Corn",
+    "🍇 Grape", "🍊 Orange", "🫘 Soybean", "🎃 Squash",
+    "🥔 Potato", "🍓 Strawberry", "🍑 Peach", "🌶 Pepper",
+    "🍅 Tomato", "🍇 Raspberry"
+]
+
+st.markdown(
+    "<div style='background-color:#17324d; padding:12px; border-radius:10px; font-size:18px;'>"
+    + " | ".join(plants) +
+    "</div>",
+    unsafe_allow_html=True
+)
 # Upload section
 st.subheader("📤 Upload Leaf Image")
 st.caption("Drag and drop your leaf image here or browse files.")
