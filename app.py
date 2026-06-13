@@ -111,13 +111,12 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for bigger upload box
 st.markdown("""
 <style>
 [data-testid="stFileUploader"] {
     border: 2px dashed #4CAF50;
-    border-radius: 15px;
-    padding: 25px;
+    border-radius: 12px;
+    padding: 12px;
     background-color: #1e1e1e;
 }
 </style>
