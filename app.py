@@ -99,7 +99,19 @@ def predict(image):
         probs = torch.softmax(output, dim=1)
         conf, pred = torch.max(probs, dim=1)
 
-    return class_names[pred.item()], conf.item()
+    label = class_names[pred.item()]
+
+    # Split plant and disease
+    plant, disease = label.split("___")
+
+    # Clean formatting
+    plant = plant.replace("_", " ").replace(",", "")
+    disease = disease.replace("_", " ")
+
+    # Final formatted label
+    label = f"{plant} - {disease}"
+
+    return label, conf.item()
 
 
 # ---------------- Streamlit UI ----------------
