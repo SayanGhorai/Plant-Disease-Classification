@@ -4,3 +4,18 @@ __pycache__/
 get-pip.py
 sample_images/
 best_plant_disease_model.pth
+# Model files
+*.pth
+*.pt
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,43 @@
+{
+  "Apple___Apple_scab": {
+    "cause": "Fungal infection caused by Venturia inaequalis.",
+    "treatment": "Apply fungicide and remove infected leaves.",
+    "prevention": "Maintain proper pruning and air circulation."
+  },
+
+  "Apple___Black_rot": {
+    "cause": "Caused by Botryosphaeria obtusa fungus.",
+    "treatment": "Remove infected fruits and apply fungicides.",
+    "prevention": "Keep orchard clean and prune infected branches."
+  },
+
+  "Apple___Cedar_apple_rust": {
+    "cause": "Fungal infection caused by Gymnosporangium.",
+    "treatment": "Use fungicides and prune infected leaves.",
+    "prevention": "Avoid nearby cedar trees and maintain hygiene."
+  },
+
+  "Apple___healthy": {
+    "cause": "Healthy leaf with no visible disease.",
+    "treatment": "No treatment needed.",
+    "prevention": "Maintain regular plant care."
+  },
+
+  "Tomato___Early_blight": {
+    "cause": "Caused by Alternaria solani fungus.",
+    "treatment": "Apply fungicide and remove infected leaves.",
+    "prevention": "Rotate crops and avoid overhead watering."
+  },
+
+  "Tomato___Late_blight": {
+    "cause": "Caused by Phytophthora infestans.",
+    "treatment": "Use copper-based fungicides.",
+    "prevention": "Ensure proper drainage and reduce humidity."
+  },
+
+  "Tomato___healthy": {
+    "cause": "Healthy leaf with no disease.",
+    "treatment": "No treatment required.",
+    "prevention": "Continue proper watering and nutrient care."
+  }
+}

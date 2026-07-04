@@ -10,6 +10,11 @@ from PIL import Image
 import json
 import os
 import gdown
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+from gradcam import GradCAM, create_heatmap
 
 
 # ---------------- Model Download ----------------
@@ -21,9 +26,29 @@ if not os.path.exists(MODEL_PATH):
     gdown.download(url, MODEL_PATH, quiet=False)
 
 
-# ---------------- Load Class Names ----------------
+# ---------------- Load Files ----------------
 with open("class_names.json", "r") as f:
     class_names = json.load(f)
+
+with open("disease_info.json", "r") as f:
+    disease_info = json.load(f)
+
+
+# ---------------- Leaf Validation ----------------
+def is_leaf_image(image, threshold=0.08):
+    img = np.array(image)
+
+    img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
+
+    lower_green = np.array([15, 20, 20])
+    upper_green = np.array([120, 255, 255])
+
+    mask = cv2.inRange(hsv, lower_green, upper_green)
+
+    green_ratio = np.count_nonzero(mask) / mask.size
+
+    return green_ratio > threshold
 
 
 # ---------------- Model ----------------
@@ -65,21 +90,24 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 @st.cache_resource
 def load_model():
     model = ShuffleNetResNet50Ensemble(len(class_names))
+
     model.load_state_dict(
         torch.load(
             MODEL_PATH,
             map_location=device
         )
     )
+
     model.to(device)
     model.eval()
+
     return model
 
 
 model = load_model()
 
 
-# ---------------- Image Transform ----------------
+# ---------------- Transform ----------------
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -92,78 +120,64 @@ transform = transforms.Compose([
 
 # ---------------- Prediction ----------------
 def predict(image):
-    image = transform(image).unsqueeze(0).to(device)
+    image_tensor = transform(image).unsqueeze(0).to(device)
 
     with torch.no_grad():
-        output = model(image)
+        output = model(image_tensor)
         probs = torch.softmax(output, dim=1)
         conf, pred = torch.max(probs, dim=1)
 
     label = class_names[pred.item()]
 
-    # Split plant and disease
-    plant, disease = label.split("___")
-
-    # Clean formatting
-    plant = plant.replace("_", " ").replace(",", "")
-    disease = disease.replace("_", " ")
-
-    # Final formatted label
-    label = f"{plant} - {disease}"
-
-    return label, conf.item()
+    return label, conf.item(), pred.item(), image_tensor
 
 
-# ---------------- Streamlit UI ----------------
-
-# Page config
+# ---------------- UI ----------------
 st.set_page_config(
     page_title="Plant Disease Classification",
     page_icon="🌿",
-    layout="centered"
+    layout="wide"
 )
 
-st.markdown("""
-<style>
-[data-testid="stFileUploader"] {
-    border: 2px dashed #4CAF50;
-    border-radius: 12px;
-    padding: 12px;
-    background-color: #1e1e1e;
-}
-</style>
-""", unsafe_allow_html=True)
 
-# Header
-st.markdown("""
-# 🌿 Plant Disease Classifier
-Detect plant diseases instantly using deep learning.
+# ---------------- Sidebar ----------------
+st.sidebar.markdown("""
+## 🌿 About the Project
+
+AI-powered plant disease detection with explainable AI and treatment recommendations.
+
+### Dataset Used
+
+**New Plant Diseases Dataset (Kaggle)**
+
+- 70k+ training images  
+- 17k+ testing images  
+- 14 plant species  
+- 38 disease classes  
+
+### Features
+
+✅ Leaf Validation  
+✅ Disease Classification  
+✅ Grad-CAM Explainability  
+✅ Treatment Suggestions  
+✅ Prevention Recommendations  
+
+---
 """)
 
-st.markdown("<br>", unsafe_allow_html=True)
+st.sidebar.success(
+    "Smart agriculture for early disease detection."
+)
 
-# Sidebar
-st.sidebar.title("📌 About")
-st.sidebar.info("""
-This application uses an **Ensemble Deep Learning Model**:
 
-- ResNet50
-- ShuffleNetV2
+# ---------------- Header ----------------
+st.title("🌿 Plant Disease Classifier")
+st.write("Detect plant diseases instantly using deep learning.")
 
-Dataset:
-- New Plant Diseases Dataset (Kaggle)
-- 14 Unique Plants
-- 38 Disease Classes
-- 70,295 Training Images
-- 17,572 Testing Images
 
-Built with:
-- PyTorch
-- Streamlit
-""")
-
-# Supported plants
-st.subheader("🌱 Supported Plants")
+# ---------------- Supported Plants ----------------
+st.subheader("Supported Plants")
 
 plants = [
     "🍎 Apple", "🫐 Blueberry", "🍒 Cherry", "🌽 Corn",
@@ -178,44 +192,139 @@ st.markdown(
     "</div>",
     unsafe_allow_html=True
 )
-# Upload section
+
+
+# ---------------- Upload ----------------
 st.subheader("📤 Upload Leaf Image")
 st.caption("Drag and drop your leaf image here or browse files.")
 
 uploaded_file = st.file_uploader(
-    "Drop image here",
-    type=["jpg", "jpeg", "png"],
-    label_visibility="collapsed"
+    "Upload Leaf Image",
+    type=["jpg", "jpeg", "png"]
 )
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
 
+if uploaded_file:
+
+    original_image = Image.open(uploaded_file).convert("RGB")
+
+    # Validate leaf
+    if not is_leaf_image(original_image):
+        st.error("❌ Please upload a valid leaf image.")
+        st.stop()
+
+    # Show only uploaded image
     st.image(
-        image,
-        caption="Uploaded Leaf Image",
+        original_image,
+        caption="Uploaded Leaf",
         width=350
     )
 
     if st.button("🔍 Predict Disease"):
-        with st.spinner("Analyzing leaf image..."):
-            label, confidence = predict(image)
 
-        st.subheader("📊 Prediction Result")
-        st.metric("Disease", label)
-        st.metric("Confidence", f"{confidence * 100:.2f}%")
+        label, confidence, pred_idx, image_tensor = predict(original_image)
 
-        if confidence >= 0.90:
-            st.success("High confidence prediction")
-        elif confidence >= 0.70:
-            st.warning("Medium confidence prediction")
+        plant, disease = label.split("___")
+        plant = plant.replace("_", " ")
+        disease = disease.replace("_", " ")
+
+        # Prediction
+        st.subheader("📊 Prediction")
+
+        col1, col2, col3 = st.columns(3)
+
+        col1.metric("Plant", plant)
+        col2.metric("Disease", disease)
+        col3.metric("Confidence", f"{confidence * 100:.2f}%")
+
+        # Healthy
+        if "healthy" in label.lower():
+            st.success("✅ Leaf appears healthy. No infected region detected.")
+
         else:
-            st.error("Low confidence prediction. Try a clearer image.")
+            target_layer = model.resnet.layer3[-1].conv3
+            grad_cam = GradCAM(model, target_layer)
 
-# Footer
-st.markdown(
-    "<p style='text-align:center; margin-top:20px; color:gray;'>"
+            # Generate CAM
+            cam = grad_cam.generate(image_tensor, pred_idx)
+            heatmap = create_heatmap(cam, original_image)
+
+            # Keep same size as uploaded image
+            h, w = original_image.size[1], original_image.size[0]
+
+            fig, ax = plt.subplots(
+                figsize=(w / 100, h / 100),
+                dpi=100
+            )
+
+            fig.patch.set_facecolor("black")
+
+            # Overlay original + heatmap
+            ax.imshow(original_image)
+            ax.imshow(
+                heatmap,
+                alpha=0.35,
+                cmap="jet"
+            )
+
+            ax.axis("off")
+
+            plt.tight_layout(pad=0)
+
+            fig.canvas.draw()
+
+            overlay = np.array(
+                fig.canvas.renderer.buffer_rgba()
+            )
+
+            # Proper RGB conversion
+            overlay_image = Image.fromarray(
+                overlay
+            ).convert("RGB")
+
+            plt.close(fig)
+
+            # Disease information
+            info = disease_info.get(label, {})
+
+            # Layout: Left = Grad-CAM | Right = Info
+            col1, col2 = st.columns([1.2, 1])
+
+            with col1:
+                st.subheader("🔥 Grad-CAM Focus")
+                st.image(
+                    overlay_image,
+                    caption="Detected Infection Area",
+                    width=350
+                )
+
+            with col2:
+                st.subheader("🦠 Cause")
+                st.info(
+                    info.get(
+                        "cause",
+                        "No information available."
+                    )
+                )
+
+                st.subheader("💊 Treatment")
+                st.success(
+                    info.get(
+                        "treatment",
+                        "No information available."
+                    )
+                )
+
+                st.subheader("🛡 Prevention")
+                st.warning(
+                    info.get(
+                        "prevention",
+                        "No information available."
+                    )
+                )
+
+# ---------------- Footer ----------------
+st.markdown("---")
+st.caption(
     "Built by Sayan Ghorai | Plant Disease Detection using Deep Learning"
-    "</p>",
-    unsafe_allow_html=True
 )
