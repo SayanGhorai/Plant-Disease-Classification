@@ -14,25 +14,10 @@
     "treatment": "Apply preventive fungicides and remove infected tissues.",
     "prevention": "Avoid nearby cedar hosts where practical and maintain orchard hygiene."
   },
-  "Apple___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Continue proper irrigation, nutrition, and regular monitoring."
-  },
-  "Blueberry___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain balanced fertilization and proper watering."
-  },
   "Cherry_(including_sour)___Powdery_mildew": {
     "cause": "Caused by powdery mildew fungi under humid conditions.",
     "treatment": "Apply sulfur or other suitable fungicides and remove infected leaves.",
     "prevention": "Improve air circulation and avoid excessive humidity."
-  },
-  "Cherry_(including_sour)___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain routine orchard care."
   },
   "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
     "cause": "Caused by Cercospora species.",
@@ -49,11 +34,6 @@
     "treatment": "Apply fungicides where recommended.",
     "prevention": "Use resistant hybrids and crop rotation."
   },
-  "Corn_(maize)___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain proper crop management."
-  },
   "Grape___Black_rot": {
     "cause": "Caused by Guignardia bidwellii fungus.",
     "treatment": "Remove infected tissues and apply fungicides.",
@@ -69,11 +49,6 @@
     "treatment": "Apply suitable fungicides and remove infected leaves.",
     "prevention": "Maintain vineyard sanitation and airflow."
   },
-  "Grape___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Continue routine vineyard management."
-  },
   "Orange___Haunglongbing_(Citrus_greening)": {
     "cause": "Bacterial disease spread by Asian citrus psyllids.",
     "treatment": "No complete cure; manage vectors and remove severely infected trees.",
@@ -84,20 +59,10 @@
     "treatment": "Use copper-based bactericides where appropriate.",
     "prevention": "Plant resistant cultivars and avoid overhead irrigation."
   },
-  "Peach___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain proper orchard care."
-  },
   "Pepper,_bell___Bacterial_spot": {
     "cause": "Caused by Xanthomonas bacteria.",
     "treatment": "Apply copper-based bactericides and remove infected plants.",
     "prevention": "Use certified seeds and avoid working with wet plants."
-  },
-  "Pepper,_bell___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain balanced nutrition and irrigation."
   },
   "Potato___Early_blight": {
     "cause": "Caused by Alternaria solani fungus.",
@@ -109,21 +74,6 @@
     "treatment": "Use recommended fungicides and remove infected plants.",
     "prevention": "Use certified seed potatoes and ensure good field drainage."
   },
-  "Potato___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Continue proper crop management."
-  },
-  "Raspberry___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain proper pruning and irrigation."
-  },
-  "Soybean___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Monitor crop health regularly."
-  },
   "Squash___Powdery_mildew": {
     "cause": "Caused by powdery mildew fungi.",
     "treatment": "Apply sulfur or suitable fungicides.",
@@ -133,11 +83,6 @@
     "cause": "Caused by Diplocarpon earlianum fungus.",
     "treatment": "Remove infected leaves and apply fungicides if necessary.",
     "prevention": "Avoid overhead irrigation and maintain field sanitation."
-  },
-  "Strawberry___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain proper watering and fertilization."
   },
   "Tomato___Bacterial_spot": {
     "cause": "Caused by Xanthomonas bacteria.",
@@ -183,10 +128,5 @@
     "cause": "Caused by Tomato mosaic virus.",
     "treatment": "No cure; remove infected plants.",
     "prevention": "Disinfect tools and use disease-free seeds."
-  },
-  "Tomato___healthy": {
-    "cause": "Healthy leaf with no visible disease.",
-    "treatment": "No treatment required.",
-    "prevention": "Maintain proper irrigation, nutrition, and monitoring."
   }
 }
